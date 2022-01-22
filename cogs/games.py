@@ -12,49 +12,49 @@ class Games(commands.Cog):
         print('Cog Games is working.')
 
     @commands.command()
-    async def guess(self, ctx, a, b):
-        """Guess the number. Work in progress, does not work now"""
-        tries = 3
-        await ctx.send(f"I will now choose a number from {a} to {b} and you have to guess it. You have 3 tries")
-        number = random.randint(a, b)
+    async def guess(self, ctx):
+        """Guess the number. Work in progress, does not work properly now"""
+        await ctx.send(f"I will now choose a number from 1 to 10 and you have to guess it. You have 3 lives.")
+        number = random.randint(1, 10)
         loop = True
+        lives = 3
         def check(m):
             if ctx.guild != None:
                 if m.guild != None:
                     return m.author.id == ctx.author.id and ctx.channel.id == m.channel.id
             else:
                 return m.author.id == ctx.author.id
-        while loop == True:
+        while loop == True and lives > 0:
             try:
                 response = await self.bot.wait_for("message", timeout = 120, check = check)
             except asyncio.TimeoutError: # Once 120 seconds passes without a response
-                    ...
+                  await ctx.send("TImed out because of no response")  
             else:
-                while tries > 0:
-                    try:
-                        response = response.content
-                        response = int(response)
-                        if int(response) > b:
-                            await ctx.send(f"Higher than {b}")
-                        elif int(response) == number:
-                            await ctx.send("Correct")
-                            loop = False
-                        elif int(response) > number:
-                            await ctx.send("Too high!")
-                            tries -= 1
-                            await ctx.send(f"You have {tries} left.")
-                        elif int(response) < number:
-                            await ctx.send("Too low!")
-                            tries -= 1
-                            await ctx.send(f"You have {tries} left.")
-                    except ValueError:
-                        await ctx.send("invalid number")
-                await ctx.send(f"You ran out of guesses. The correct number is {number}.")
+                try:
+                    response = response.content
+                    response = int(response)
 
-                
-
-                
-    
+                    if int(response) == number:
+                        await ctx.send("Correct")
+                        loop = False
+                    elif int(response) > number:
+                        await ctx.send("Too high!")
+                        lives -= 1
+                        await ctx.send(f"You have {lives} lives left")
+                    elif int(response) < number:
+                        await ctx.send("Too low!")
+                        lives -= 1
+                        await ctx.send(f"You have {lives} lives left")
+                    elif int(response) < 1 or int(response) > 10:
+                        await ctx.send("Out of range")
+                        await ctx.send(f"You have {lives} lives left")
+                except TypeError:
+                    await ctx.send("Not a valid integer")
+                    await ctx.send(f"You have {lives} lives left")
+                except ValueError:
+                    await ctx.send("Inappropriate argument value")
+                    await ctx.send(f"You have {lives} lives left")
+            
 
 def setup(bot):
     bot.add_cog(Games(bot))

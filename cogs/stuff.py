@@ -47,11 +47,6 @@ class Stuff(commands.Cog):
         """self explanatory"""
         await ctx.send('Here is the github for this bot. `https://github.com/Thecoder3281F/testing`')
 
-    @commands.command(aliases = ['featured'])
-    async def featured_people(self, ctx):
-        """look"""
-        await ctx.send('This is a very good bot: `https://github.com/The-Codin-Hole/HotWired-Bot`')
-
     @commands.command()
     async def faqs(self, ctx):
         """Frequently asked questions"""

@@ -15,12 +15,22 @@ class Fun(commands.Cog):
 
     
     # Commands
+
+    # Miscellaneous
     @commands.command()
     async def ping(self, ctx):
         """latency"""
         await ctx.send(f'Pong! {round(self.bot.latency * 1000)} ms')
 
-    @commands.command(aliases=['8ball'])
+
+
+    # randomness/chance related commands
+    @commands.group(invoke_without_command=True)
+    async def randomness_cmds(self, ctx):
+        """Commands that rely on chance"""
+        await ctx.send("Commands: 8ball, random_fact, roll_dice")
+
+    @randomness_cmds.command(aliases=['8ball'])
     async def _8ball(self, ctx, *, question):
         """the 8 ball command. """
         responses = [
@@ -47,7 +57,7 @@ class Fun(commands.Cog):
         ]
         await ctx.send(f'Question: {question}\nAnswer: {random.choice(responses)}')
 
-    @commands.command(aliases = ['randomfact'])
+    @randomness_cmds.command(aliases = ['randomfact'])
     async def random_fact(self, ctx):
         """random fact. self explanatory"""
         responses2 = [
@@ -61,20 +71,26 @@ class Fun(commands.Cog):
         ]
         await ctx.send(f'{random.choice(responses2)}')
     
-    @commands.command(aliases = ['dice'])
+    @randomness_cmds.command(aliases = ['dice'])
     async def roll_dice(self, ctx):
         """roll a dice from 1 to 6"""
         await ctx.send(f':game_die: {random.randint(1, 6)}')
     
 
 
-    @commands.command(aliases = ['repeat'])
+
+    # message parsing commands
+    @commands.group(invoke_without_command=True)
+    async def msg_parsers(self, ctx):
+        """group of commands that parse messages"""
+        await ctx.send("Commands: Copy, Replace")
+    
+    @msg_parsers.command(aliases = ['repeat'])
     async def copy(self, ctx, *, statement):
         """repeats what you say"""
         await ctx.send(statement)
     
-    @commands.command(aliases = ['swap'])
-    @commands.check_any(commands.is_owner())
+    @msg_parsers.command(aliases = ['swap'])
     async def replace(self, ctx, *, statement):
         """replaces what you say"""
         await ctx.channel.purge(limit = 1)
