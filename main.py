@@ -97,4 +97,4 @@ for filename in os.listdir('./cogs'):
 
 
 # Run
-bot.run('NzA3NDEyOTY3NzA4NDI2MjUx.XrIbqg.aDyHmYQMhLksJ4AQ-rt3zJrGxj4')
+bot.run('token')
